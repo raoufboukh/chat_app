@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPass] = useState("");
+  const navigate = useNavigate();
   return (
     <div className="flex justify-center items-center bg-black h-screen">
       <div className="w-[500px] shadow-md  shadow-gray-500  rounded-md text-white">
@@ -14,9 +16,11 @@ const Register = () => {
           className="px-16 py-5"
           onSubmit={(e) => {
             e.preventDefault();
-            setName("");
-            setEmail("");
-            setPass("");
+            axios
+              .post("http://localhost:5000/register", { name, email, password })
+              .then(() => {
+                navigate("/login");
+              });
           }}
         >
           <div>

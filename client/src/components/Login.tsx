@@ -1,9 +1,13 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { enqueueSnackbar } from "notistack";
+import axios from "axios";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPass] = useState("");
+  const navigate = useNavigate();
+  axios.defaults.withCredentials = true;
   return (
     <div className="flex justify-center items-center bg-black h-screen">
       <div className="w-[500px] shadow-md  shadow-gray-500  rounded-md text-white">
@@ -13,6 +17,16 @@ const Login = () => {
           className="px-16 py-5"
           onSubmit={(e) => {
             e.preventDefault();
+            axios
+              .post("http://localhost:5000/login", { email, password })
+              .then((res) => {
+                if (res.data == "Success") {
+                  navigate("/home");
+                  enqueueSnackbar("Logged in successfully", {
+                    variant: "success",
+                  });
+                }
+              });
           }}
         >
           <div>

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-const Home = () => {
+const Hero = () => {
   return (
     <div className="bg-black text-white relative w-full h-screen">
       <div className="container absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
@@ -19,4 +19,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Hero;
