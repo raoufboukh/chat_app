@@ -33,6 +33,7 @@ const Register = () => {
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              required
             />
           </div>
           <div>
@@ -45,6 +46,7 @@ const Register = () => {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
             />
           </div>
           <div>
@@ -57,6 +59,7 @@ const Register = () => {
               id="pass"
               value={password}
               onChange={(e) => setPass(e.target.value)}
+              required
             />
           </div>
           <button

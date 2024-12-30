@@ -25,6 +25,10 @@ const Login = () => {
                   enqueueSnackbar("Logged in successfully", {
                     variant: "success",
                   });
+                } else {
+                  enqueueSnackbar("Invalid credentials", {
+                    variant: "error",
+                  });
                 }
               });
           }}
@@ -39,6 +43,7 @@ const Login = () => {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
             />
           </div>
           <div>
@@ -51,6 +56,7 @@ const Login = () => {
               id="pass"
               value={password}
               onChange={(e) => setPass(e.target.value)}
+              required
             />
           </div>
           <button
