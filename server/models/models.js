@@ -2,13 +2,27 @@ import mongoose from "mongoose";
 
 const user = new mongoose.Schema(
   {
-    name: String,
-    email: String,
-    password: String,
+    name: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    picture: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true,
   }
 );
 
-export const information = mongoose.model("information", user);
+export const information = mongoose.model("User", user);

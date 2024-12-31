@@ -59,6 +59,7 @@ const Register = () => {
               id="pass"
               value={password}
               onChange={(e) => setPass(e.target.value)}
+              minLength={6}
               required
             />
           </div>

@@ -43,12 +43,27 @@ export const deleteInformation = async (req, res) => {
   }
 };
 
-export const register = (req, res) => {
+export const register = async (req, res) => {
   const { name, email, password } = req.body;
+  if (password.length < 6) {
+    return res
+      .status(400)
+      .json({ message: "Password must be at least 6 characters long" });
+  }
+  if (email === "") {
+    return res
+      .status(500)
+      .json({ message: "Please enter a valid email address" });
+  }
+  if (!name || !email || !password) {
+    return res.status(400).json({ message: "Please fill the details" });
+  }
+  const user = await information.findOne({ email: email });
+  if (user) return res.status(400).json({ message: "User already exists" });
   bcrypt.hash(password, 10).then((hash) => {
     information
       .create({ name, email, password: hash })
-      .then((data) => res.send(data))
+      .then((data) => res.status(201).send(data))
       .catch((err) => res.send(err));
   });
 };
@@ -61,10 +76,19 @@ export const login = (req, res) => {
       if (data) {
         bcrypt.compare(password, data.password, (err, response) => {
           if (response) {
-            const token = jwt.sign({ email: data.email }, "jwt-secret-key", {
-              expiresIn: "1d",
+            const token = jwt.sign(
+              { email: data.email },
+              process.env.JWT_SECRET,
+              {
+                expiresIn: "7d",
+              }
+            );
+            res.cookie("token", token, {
+              maxAge: 7 * 24 * 60 * 60 * 1000,
+              httpOnly: true,
+              sameSite: "strict",
+              secure: process.env.NODE_ENV === "production" ? true : false,
             });
-            res.cookie("token", token);
             res.send("Success");
           } else {
             res.send("the password is incorrect");
@@ -82,7 +106,7 @@ export const verify = (req, res, next) => {
   if (!token) {
     return res.send("The token is not available");
   } else {
-    jwt.verify(token, "jwt-secret-key", (err, response) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err, response) => {
       if (err) return response.send("token is wrong");
       next();
     });
