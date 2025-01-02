@@ -1,6 +1,7 @@
 import { information } from "../models/models.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import cloudinary from "../lib/cloudinary.js";
 
 export const getInformation = (req, res) => {
   information.find().then((result) => {
@@ -77,7 +78,7 @@ export const login = (req, res) => {
         bcrypt.compare(password, data.password, (err, response) => {
           if (response) {
             const token = jwt.sign(
-              { email: data.email },
+              { id: data._id, email: data.email },
               process.env.JWT_SECRET,
               {
                 expiresIn: "7d",
@@ -101,6 +102,16 @@ export const login = (req, res) => {
     .catch((err) => res.send(err));
 };
 
+export const logout = (req, res) => {
+  try {
+    res.cookie("token", "", { maxAge: 0 });
+    res.status(200).json({ message: "Logged out successfully" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
 export const verify = (req, res, next) => {
   const token = req.cookies.token;
   if (!token) {
@@ -110,5 +121,34 @@ export const verify = (req, res, next) => {
       if (err) return response.send("token is wrong");
       next();
     });
+  }
+};
+
+export const updateProfile = async (req, res) => {
+  try {
+    const { picture } = req.body;
+    const id = req.user._id;
+    if (!picture) {
+      return res.status(400).json({ message: "Please upload a picture" });
+    }
+    const upload = await cloudinary.uploader.upload(picture);
+    const update = await information.findByIdAndUpdate(
+      id,
+      {
+        picture: upload.secure_url,
+      },
+      { new: true }
+    );
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const check = (req, res) => {
+  try {
+    res.status(200).send(req.user);
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send("Something went wrong");
   }
 };

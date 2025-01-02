@@ -12,7 +12,21 @@ const Home = () => {
       }
     });
   });
-  return <div className="text-4xl">Hello Mister</div>;
+  return (
+    <>
+      <div className="text-4xl">Hello Mister</div>
+      <button
+        className="text-4xl"
+        onClick={() => {
+          axios.get("http://localhost:5000/logout").then(() => {
+            navigate("/login");
+          });
+        }}
+      >
+        Logout
+      </button>
+    </>
+  );
 };
 
 export default Home;
