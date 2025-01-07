@@ -20,7 +20,7 @@ const router = express.Router();
 router.route("/login").post(login);
 router.route("/register").post(register);
 router.route("/home").get(verify, (req, res) => res.send("Success"));
-router.route("/logout").post(logout);
+router.route("/logout").get(logout);
 router.route("/update-profile").put(protectRoute, updateProfile);
 router.route("/check").post(protectRoute, check);
 export default router;
