@@ -1,48 +1,48 @@
-import { information } from "../models/models.js";
+import { User } from "../models/models.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import cloudinary from "../lib/cloudinary.js";
 
-export const getInformation = (req, res) => {
-  information.find().then((result) => {
-    res.send(result);
-  });
-};
+// export const getInformation = (req, res) => {
+//   information.find().then((result) => {
+//     res.send(result);
+//   });
+// };
 
-export const createInformation = (req, res) => {
-  information
-    .create(req.body)
-    .then((result) => res.send(result))
-    .catch((err) => res.send(err));
-};
+// export const createInformation = (req, res) => {
+//   information
+//     .create(req.body)
+//     .then((result) => res.send(result))
+//     .catch((err) => res.send(err));
+// };
 
-export const updateInformation = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const update = await information.findByIdAndUpdate(id, req.body);
-    if (update) {
-      res.status(200).send(update);
-    } else {
-      res.status(404).send("No data found");
-    }
-  } catch (err) {
-    console.log(err);
-  }
-};
+// export const updateInformation = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const update = await information.findByIdAndUpdate(id, req.body);
+//     if (update) {
+//       res.status(200).send(update);
+//     } else {
+//       res.status(404).send("No data found");
+//     }
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
 
-export const deleteInformation = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const del = await information.findByIdAndDelete(id);
-    if (del) {
-      res.status(200).send("deleted successfully");
-    } else {
-      res.status(404).send("No data found");
-    }
-  } catch (err) {
-    console.log(err);
-  }
-};
+// export const deleteInformation = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const del = await information.findByIdAndDelete(id);
+//     if (del) {
+//       res.status(200).send("deleted successfully");
+//     } else {
+//       res.status(404).send("No data found");
+//     }
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
 
 export const register = async (req, res) => {
   const { name, email, password } = req.body;
@@ -59,11 +59,10 @@ export const register = async (req, res) => {
   if (!name || !email || !password) {
     return res.status(400).json({ message: "Please fill the details" });
   }
-  const user = await information.findOne({ email: email });
+  const user = await User.findOne({ email: email });
   if (user) return res.status(400).json({ message: "User already exists" });
   bcrypt.hash(password, 10).then((hash) => {
-    information
-      .create({ name, email, password: hash })
+    User.create({ name, email, password: hash })
       .then((data) => res.status(201).send(data))
       .catch((err) => res.send(err));
   });
@@ -71,8 +70,7 @@ export const register = async (req, res) => {
 
 export const login = (req, res) => {
   const { email, password } = req.body;
-  information
-    .findOne({ email: email })
+  User.findOne({ email: email })
     .then((data) => {
       if (data) {
         bcrypt.compare(password, data.password, (err, response) => {
@@ -132,7 +130,7 @@ export const updateProfile = async (req, res) => {
       return res.status(400).json({ message: "Please upload a picture" });
     }
     const upload = await cloudinary.uploader.upload(picture);
-    const update = await information.findByIdAndUpdate(
+    const update = await User.findByIdAndUpdate(
       id,
       {
         picture: upload.secure_url,

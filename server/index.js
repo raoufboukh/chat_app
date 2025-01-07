@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import router from "./routers/routers.js";
+import messageRouter from "./routers/message.route.js";
 import cookieParser from "cookie-parser";
 
 dotenv.config();
@@ -19,6 +20,7 @@ app.use(
 app.use(cookieParser());
 
 app.use("/", router);
+app.use("/message", messageRouter);
 
 
 const PORT = process.env.PORT || 5000;
