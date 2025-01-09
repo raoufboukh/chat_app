@@ -2,9 +2,10 @@ import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 
 interface User {
-  id: string;
   name: string;
   email: string;
+  password: string;
+  picture: string;
 }
 
 interface AuthStore {
