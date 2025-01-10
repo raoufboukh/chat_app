@@ -9,6 +9,7 @@ import { Loader } from "lucide-react";
 import { useEffect } from "react";
 import SettingsPage from "./pages/Settings.tsx";
 import Profile from "./pages/Profile.tsx";
+import Navbar from "./components/Navbar.tsx";
 
 function App() {
   const { user, checkAuth, isChecking } = useAuthStore();
@@ -24,6 +25,7 @@ function App() {
     );
   return (
     <>
+      <Navbar />
       <Routes>
         <Route path="/" element={user ? <Hero /> : <Navigate to="/login" />} />
         <Route
