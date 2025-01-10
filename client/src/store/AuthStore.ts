@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 
@@ -15,6 +16,7 @@ interface AuthStore {
   isLoggingIn: boolean;
   isUpdating: boolean;
   checkAuth: () => void;
+  signUp: (da: any) => void;
   logout: () => void;
 }
 
@@ -35,5 +37,6 @@ export const useAuthStore = create<AuthStore>((set) => ({
       set({ isChecking: false });
     }
   },
+  signUp: async (data: any) => {},
   logout: () => set({ user: null }),
 }));
