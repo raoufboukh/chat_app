@@ -12,6 +12,8 @@ import {
   MessageSquare,
   User,
 } from "lucide-react";
+import AuthImagePattern from "../components/AuthImagePattern";
+import { enqueueSnackbar } from "notistack";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -20,6 +22,23 @@ const Register = () => {
   const [showPassword, setShowPass] = useState(false);
   const { signUp, isSigninUp } = useAuthStore();
   const navigate = useNavigate();
+  const validateForm = () => {
+    if (!name.trim())
+      return enqueueSnackbar("Full Name is required", { variant: "error" });
+    if (!email.trim())
+      return enqueueSnackbar("Email is required", { variant: "error" });
+    if (!password.trim())
+      return enqueueSnackbar("Password is required", { variant: "error" });
+    if (!/\S+@\S+\.\S/.test(email))
+      return enqueueSnackbar("Invalid Email", { variant: "error" });
+    if (password.length < 6) {
+      return enqueueSnackbar("Password must be atleast 6 characters", {
+        variant: "error",
+      });
+    }
+
+    return true;
+  };
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
       <div className="flex flex-col justify-center items-center p-6 sm:p-12">
@@ -42,11 +61,9 @@ const Register = () => {
           className="space-y-6 px-6 w-full"
           onSubmit={(e) => {
             e.preventDefault();
-            axios
-              .post("http://localhost:5000/register", { name, email, password })
-              .then(() => {
-                navigate("/login");
-              });
+            if (validateForm()) {
+              signUp({ name, email, password });
+            }
           }}
         >
           <div className="form-control">
@@ -137,6 +154,10 @@ const Register = () => {
           </p>
         </div>
       </div>
+      <AuthImagePattern
+        title="Join Our Community"
+        subtitle="Connect with friends, share moments,and stay in touch with your loved ones."
+      />
       {/* <div className="w-[500px] shadow-md  shadow-gray-500  rounded-md text-white">
         <h1 className="text-center text-3xl">Register</h1>
         <form

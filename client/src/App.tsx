@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Navigate, Route, Routes } from "react-router-dom";
 import Login from "./pages/Login.tsx";
 import Register from "./pages/Register.tsx";
@@ -15,7 +14,7 @@ function App() {
   const { user, checkAuth, isChecking } = useAuthStore();
   useEffect(() => {
     checkAuth();
-  }, [checkAuth]);
+  }, []);
   console.log({ user });
   if (isChecking && !user)
     return (
