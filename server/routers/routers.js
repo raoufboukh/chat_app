@@ -11,7 +11,7 @@ import {
   updateProfile,
   verify,
 } from "../controllers/control.js";
-import { protectRoute } from "../middelware/middelware.js";
+import { protectRoute } from "../middleware/middleware.js";
 
 const router = express.Router();
 

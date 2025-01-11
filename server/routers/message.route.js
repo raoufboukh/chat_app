@@ -4,7 +4,7 @@ import {
   sendMessage,
   getUsers,
 } from "../controllers/message.controller.js";
-import { protectRoute } from "../middelware/middelware.js";
+import { protectRoute } from "../middleware/middleware.js";
 
 const messageRouter = express.Router();
 

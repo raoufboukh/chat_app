@@ -2,6 +2,7 @@ import { User } from "../models/models.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import cloudinary from "../lib/cloudinary.js";
+import { generateToken } from "../lib/utils.js";
 
 // export const getInformation = (req, res) => {
 //   information.find().then((result) => {
@@ -46,26 +47,48 @@ import cloudinary from "../lib/cloudinary.js";
 
 export const register = async (req, res) => {
   const { name, email, password } = req.body;
-  if (password.length < 6) {
-    return res
-      .status(400)
-      .json({ message: "Password must be at least 6 characters long" });
+  try {
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    if (password.length < 6) {
+      return res
+        .status(400)
+        .json({ message: "Password must be at least 6 characters" });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (user) return res.status(400).json({ message: "Email already exists" });
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newUser = new User({
+      name,
+      email,
+      password: hashedPassword,
+    });
+
+    if (newUser) {
+      // generate jwt token here
+      generateToken(newUser._id, res);
+      await newUser.save();
+
+      res.status(201).json({
+        _id: newUser._id,
+        name: newUser.name,
+        email: newUser.email,
+        profilePic: newUser.profilePic,
+      });
+    } else {
+      res.status(400).json({ message: "Invalid user data" });
+    }
+  } catch (error) {
+    console.log("Error in signup controller", error.message);
+    res.status(500).json({ message: "Internal Server Error" });
   }
-  if (email === "") {
-    return res
-      .status(500)
-      .json({ message: "Please enter a valid email address" });
-  }
-  if (!name || !email || !password) {
-    return res.status(400).json({ message: "Please fill the details" });
-  }
-  const user = await User.findOne({ email: email });
-  if (user) return res.status(400).json({ message: "User already exists" });
-  bcrypt.hash(password, 10).then((hash) => {
-    User.create({ name, email, password: hash })
-      .then((data) => res.status(201).send(data))
-      .catch((err) => res.send(err));
-  });
 };
 
 export const login = (req, res) => {
@@ -75,19 +98,7 @@ export const login = (req, res) => {
       if (data) {
         bcrypt.compare(password, data.password, (err, response) => {
           if (response) {
-            const token = jwt.sign(
-              { id: data._id, email: data.email },
-              process.env.JWT_SECRET,
-              {
-                expiresIn: "7d",
-              }
-            );
-            res.cookie("token", token, {
-              maxAge: 7 * 24 * 60 * 60 * 1000,
-              httpOnly: true,
-              sameSite: "strict",
-              secure: process.env.NODE_ENV === "production" ? true : false,
-            });
+            generateToken(data._id, res);
             res.send("Success");
           } else {
             res.send("the password is incorrect");

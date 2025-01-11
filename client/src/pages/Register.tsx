@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/AuthStore";
 import {
   Eye,
@@ -21,7 +19,6 @@ const Register = () => {
   const [password, setPass] = useState("");
   const [showPassword, setShowPass] = useState(false);
   const { signUp, isSigninUp } = useAuthStore();
-  const navigate = useNavigate();
   const validateForm = () => {
     if (!name.trim())
       return enqueueSnackbar("Full Name is required", { variant: "error" });
@@ -29,8 +26,6 @@ const Register = () => {
       return enqueueSnackbar("Email is required", { variant: "error" });
     if (!password.trim())
       return enqueueSnackbar("Password is required", { variant: "error" });
-    if (!/\S+@\S+\.\S/.test(email))
-      return enqueueSnackbar("Invalid Email", { variant: "error" });
     if (password.length < 6) {
       return enqueueSnackbar("Password must be atleast 6 characters", {
         variant: "error",
@@ -81,7 +76,6 @@ const Register = () => {
               className="input input-bordered  w-full pl-10"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              required
             />
           </div>
           <div className="form-control">
@@ -99,7 +93,6 @@ const Register = () => {
               className="input input-bordered  w-full pl-10"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              required
             />
           </div>
           <div className="form-control">
@@ -127,7 +120,6 @@ const Register = () => {
               className="input input-bordered  w-full pl-10 placeholder:text-4xl placeholder:-translate-y-1"
               value={password}
               onChange={(e) => setPass(e.target.value)}
-              required
             />
             <button
               type="submit"

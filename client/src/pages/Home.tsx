@@ -8,7 +8,7 @@ const Home = () => {
   useEffect(() => {
     axios.get("http://localhost:5000/home").then((res) => {
       if (res.data !== "Success") {
-        navigate("/login");
+        navigate("/register");
       }
     });
   });
