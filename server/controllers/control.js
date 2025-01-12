@@ -72,7 +72,6 @@ export const register = async (req, res) => {
     });
 
     if (newUser) {
-      // generate jwt token here
       generateToken(newUser._id, res);
       await newUser.save();
 
@@ -80,7 +79,7 @@ export const register = async (req, res) => {
         _id: newUser._id,
         name: newUser.name,
         email: newUser.email,
-        profilePic: newUser.profilePic,
+        picture: newUser.picture,
       });
     } else {
       res.status(400).json({ message: "Invalid user data" });
