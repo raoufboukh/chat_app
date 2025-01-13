@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
@@ -52,5 +53,13 @@ export const useAuthStore = create<AuthStore>((set) => ({
       set({ isSigninUp: false });
     }
   },
-  logout: () => set({ user: null }),
+  logout: async () => {
+    try {
+      await axiosInstance.get("/logout");
+      set({ user: null });
+      enqueueSnackbar("Logged out successfully", { variant: "success" });
+    } catch (error) {
+      enqueueSnackbar("An error occurred", { variant: "error" });
+    }
+  },
 }));
