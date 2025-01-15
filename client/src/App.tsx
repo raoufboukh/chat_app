@@ -24,6 +24,7 @@ function App() {
   return (
     <>
       <Navbar />
+      <div className="h-6"></div>
       <Routes>
         <Route path="/" element={user ? <Home /> : <Navigate to="/login" />} />
         <Route
