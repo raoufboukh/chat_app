@@ -45,9 +45,9 @@ export const useAuthStore = create<AuthStore>((set) => ({
     try {
       const res = await axiosInstance.post("/login", data);
       set({ user: res.data });
-      enqueueSnackbar("Account Created Successfully", { variant: "success" });
+      enqueueSnackbar("Welcome Back", { variant: "success" });
     } catch (error) {
-      enqueueSnackbar(String(error), { variant: "error" });
+      enqueueSnackbar('Invalid Credential', { variant: "error" });
     } finally {
       set({ isLoggingIn: false });
     }

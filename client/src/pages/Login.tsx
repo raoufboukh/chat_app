@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-// import { enqueueSnackbar } from "notistack";
-import axios from "axios";
 import { useAuthStore } from "../store/AuthStore";
 import AuthImagePattern from "../components/AuthImagePattern";
 import { Eye, EyeOff, Loader2, Mail, Lock, MessageSquare } from "lucide-react";
@@ -11,7 +9,6 @@ const Login = () => {
   const [password, setPass] = useState("");
   const [showPassword, setShowPass] = useState(false);
   const { login, isLoggingIn } = useAuthStore();
-  axios.defaults.withCredentials = true;
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
       <div className="flex flex-col justify-center items-center p-6 sm:p-12">

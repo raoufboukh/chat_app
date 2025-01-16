@@ -50,24 +50,23 @@ export const register = async (req, res) => {
   }
 };
 
-export const login = (req, res) => {
+export const login = async (req, res) => {
   const { email, password } = req.body;
-  User.findOne({ email: email })
-    .then((data) => {
-      if (data) {
-        bcrypt.compare(password, data.password, (err, response) => {
-          if (response) {
-            generateToken(data._id, res);
-            res.send("Success");
-          } else {
-            res.send("the password is incorrect");
-          }
-        });
-      } else {
-        res.send("invalid credentials");
-      }
-    })
-    .catch((err) => res.send(err));
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(401).send("Email doesn't exist");
+    const isPassword = bcrypt.compare(password, user.password);
+    if (!isPassword) return res.status(401).send("Invalid Password");
+    generateToken(user._id, res);
+    res.status(200).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      picture: user.picture,
+    });
+  } catch (error) {
+    res.status(500).send("Internal Server Error");
+  }
 };
 
 export const logout = (req, res) => {
