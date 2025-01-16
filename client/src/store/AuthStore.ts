@@ -18,6 +18,7 @@ interface AuthStore {
   isLoggingIn: boolean;
   isUpdating: boolean;
   checkAuth: () => void;
+  login: (data: any) => void;
   signUp: (da: any) => void;
   logout: () => void;
 }
@@ -37,6 +38,18 @@ export const useAuthStore = create<AuthStore>((set) => ({
       set({ user: null });
     } finally {
       set({ isChecking: false });
+    }
+  },
+  login: async (data: any) => {
+    set({ isLoggingIn: true });
+    try {
+      const res = await axiosInstance.post("/login", data);
+      set({ user: res.data });
+      enqueueSnackbar("Account Created Successfully", { variant: "success" });
+    } catch (error) {
+      enqueueSnackbar(String(error), { variant: "error" });
+    } finally {
+      set({ isLoggingIn: false });
     }
   },
   signUp: async (data: any) => {
