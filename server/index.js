@@ -9,11 +9,11 @@ import cookieParser from "cookie-parser";
 dotenv.config();
 
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: "20mb", extended: true }));
 app.use(
   cors({
     origin: ["http://localhost:5173"],
-    methods: ["GET", "POST", "PATCH", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );

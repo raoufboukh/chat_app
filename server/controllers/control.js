@@ -107,6 +107,7 @@ export const updateProfile = async (req, res) => {
       },
       { new: true }
     );
+    res.status(200).json(update);
   } catch (err) {
     console.log(err);
   }

@@ -80,12 +80,12 @@ export const useAuthStore = create<AuthStore>((set) => ({
   updateProfile: async (data: any) => {
     set({isUpdating: true});
     try {
-      const res = await axiosInstance.put("/update-profile",data);
+      const res = await axiosInstance.put("/update-profile", data);
       set({user: res.data});
       enqueueSnackbar("Profile Updated Successfully", {variant: "success"});
     } catch (error) {
       console.log(error);
-      enqueueSnackbar("An error occurred", {variant: "error"});
+      enqueueSnackbar(String(error), {variant: "error"});
     }finally{
       set({isUpdating: false});
     }
