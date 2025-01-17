@@ -63,6 +63,7 @@ export const login = async (req, res) => {
       name: user.name,
       email: user.email,
       picture: user.picture,
+      createdAt: user.createdAt,
     });
   } catch (error) {
     res.status(500).send("Internal Server Error");

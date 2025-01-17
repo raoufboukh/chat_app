@@ -9,6 +9,7 @@ interface User {
   email: string;
   password: string;
   picture: string;
+  createdAt: string; // Ajout de la propriété createdAt
 }
 
 interface AuthStore {
@@ -21,6 +22,7 @@ interface AuthStore {
   login: (data: any) => void;
   signUp: (da: any) => void;
   logout: () => void;
+  updateProfile(data: any): void;
 }
 
 export const useAuthStore = create<AuthStore>((set) => ({
@@ -47,7 +49,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
       set({ user: res.data });
       enqueueSnackbar("Welcome Back", { variant: "success" });
     } catch (error) {
-      enqueueSnackbar('Invalid Credential', { variant: "error" });
+      enqueueSnackbar("Invalid Credential", { variant: "error" });
     } finally {
       set({ isLoggingIn: false });
     }
@@ -75,4 +77,17 @@ export const useAuthStore = create<AuthStore>((set) => ({
       enqueueSnackbar("An error occurred", { variant: "error" });
     }
   },
+  updateProfile: async (data: any) => {
+    set({isUpdating: true});
+    try {
+      const res = await axiosInstance.put("/update-profile",data);
+      set({user: res.data});
+      enqueueSnackbar("Profile Updated Successfully", {variant: "success"});
+    } catch (error) {
+      console.log(error);
+      enqueueSnackbar("An error occurred", {variant: "error"});
+    }finally{
+      set({isUpdating: false});
+    }
+  }
 }));
