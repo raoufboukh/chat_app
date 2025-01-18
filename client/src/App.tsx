@@ -8,9 +8,11 @@ import { useEffect } from "react";
 import SettingsPage from "./pages/Settings.tsx";
 import Profile from "./pages/Profile.tsx";
 import Navbar from "./components/Navbar.tsx";
+import { useThemeStore } from "./store/themeStore.ts";
 
 function App() {
   const { user, checkAuth, isChecking } = useAuthStore();
+  const { theme } = useThemeStore();
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
@@ -22,9 +24,9 @@ function App() {
       </div>
     );
   return (
-    <>
+    <div data-theme={theme}>
       <Navbar />
-      <div className="h-6"></div>
+      {/* <div className="h-6"></div> */}
       <Routes>
         <Route path="/" element={user ? <Home /> : <Navigate to="/login" />} />
         <Route
@@ -41,7 +43,7 @@ function App() {
           element={user ? <Profile /> : <Navigate to={"/login"} />}
         />
       </Routes>
-    </>
+    </div>
   );
 }
 
