@@ -1,14 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect } from "react";
 import { useChatStore } from "../store/ChatStore";
 import SidebarSkeleton from "./skeletons/SidebarSkeleton";
 import { Users } from "lucide-react";
+import { useAuthStore } from "../store/AuthStore";
 
 const Sidebar = () => {
   const { users, getUser, isUsersLoading, selectedUser, setSelectedUser } =
     useChatStore();
 
-  const OnlineUsers: string | any[] = [];
+  const { OnlineUsers } = useAuthStore();
   useEffect(() => {
     getUser();
   }, [getUser]);
