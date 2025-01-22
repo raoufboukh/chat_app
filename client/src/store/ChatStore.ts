@@ -10,6 +10,8 @@ interface chatStore {
   isUsersLoading: boolean;
   isMessagesLoading: boolean;
   getUser: () => void;
+  getMessages: (id: string) => void;
+  setSelectedUser: (selectedUser: any) => void;
 }
 
 export const useChatStore = create<chatStore>((set) => ({
@@ -21,7 +23,7 @@ export const useChatStore = create<chatStore>((set) => ({
   getUser: async () => {
     set({ isUsersLoading: true });
     try {
-      const res = await axiosInstance.get("/users");
+      const res = await axiosInstance.get("/message/users");
       set({ users: res.data });
     } catch (error) {
       enqueueSnackbar(`${error}`, { variant: "error" });
@@ -40,4 +42,5 @@ export const useChatStore = create<chatStore>((set) => ({
       set({ isMessagesLoading: false });
     }
   },
+  setSelectedUser: (selectedUser: any) => set({ selectedUser }),
 }));
