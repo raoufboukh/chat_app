@@ -7,15 +7,17 @@ import { useAuthStore } from "../store/AuthStore";
 const Sidebar = () => {
   const { users, getUser, isUsersLoading, selectedUser, setSelectedUser } =
     useChatStore();
-
   const { OnlineUsers } = useAuthStore();
   const [showOnlineUsers, setShowOnlineUsers] = useState(false);
+
   useEffect(() => {
     getUser();
   }, [getUser]);
+
   const filteredUsers = showOnlineUsers
     ? users.filter((user) => OnlineUsers.includes(user._id))
     : users;
+
   if (isUsersLoading) return <SidebarSkeleton />;
   return (
     <aside className="h-full w-20 lg:w-72 border-r border-base-300 flex flex-col transition-all duration-200">
@@ -69,6 +71,9 @@ const Sidebar = () => {
             </div>
           </button>
         ))}
+        {filteredUsers.length === 0 && (
+          <div className="text-center text-zinc-500 py-4">No Online Users</div>
+        )}
       </div>
     </aside>
   );
