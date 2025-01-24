@@ -11,12 +11,13 @@ import Navbar from "./components/Navbar.tsx";
 import { useThemeStore } from "./store/themeStore.ts";
 
 function App() {
-  const { user, checkAuth, isChecking } = useAuthStore();
+  const { user, checkAuth, isChecking, OnlineUsers } = useAuthStore();
   const { theme } = useThemeStore();
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
   console.log({ user });
+  console.log({ OnlineUsers });
   if (isChecking && !user)
     return (
       <div className="flex items-center justify-center h-screen">
