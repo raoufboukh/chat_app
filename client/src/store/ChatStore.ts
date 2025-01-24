@@ -2,7 +2,7 @@
 import { create } from "zustand";
 import { enqueueSnackbar } from "notistack";
 import { axiosInstance } from "../lib/axios";
-
+import { useAuthStore } from "./AuthStore";
 interface chatStore {
   messages: any[];
   users: any[];
@@ -12,6 +12,8 @@ interface chatStore {
   getUser: () => void;
   getMessages: (id: string) => void;
   sendMessage: (data: any) => void;
+  subscribeToMessages: () => void;
+  unsubscribeToMessages: () => void;
   setSelectedUser: (selectedUser: any) => void;
 }
 
@@ -54,6 +56,23 @@ export const useChatStore = create<chatStore>((set, get) => ({
     } catch (error) {
       enqueueSnackbar(`${error}`, { variant: "error" });
     }
+  },
+
+  subscribeToMessages: () => {
+    const { selectedUser } = get();
+    if (!selectedUser) return;
+    const socket = useAuthStore.getState().socket;
+    if (!socket) return;
+    socket.on("newMessage", (message: any) => {
+      const isMessage = message.senderId === selectedUser._id;
+      if (!isMessage) return;
+      set({ messages: [...get().messages, message] });
+    });
+  },
+  unsubscribeToMessages: () => {
+    const socket = useAuthStore.getState().socket;
+    if (!socket) return;
+    socket.off("newMessage");
   },
   setSelectedUser: (selectedUser: any) => set({ selectedUser }),
 }));
