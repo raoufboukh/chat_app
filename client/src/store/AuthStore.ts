@@ -5,6 +5,7 @@ import { axiosInstance } from "../lib/axios";
 import { enqueueSnackbar } from "notistack";
 
 interface User {
+  _id: string; // Ajout de l'identifiant de Mongoose
   name: string;
   email: string;
   password: string;
