@@ -5,7 +5,7 @@ import { axiosInstance } from "../lib/axios";
 import { enqueueSnackbar } from "notistack";
 import { Socket, io } from "socket.io-client";
 
-const BASE_URL = "https://chat-app-api-eosin.vercel.app";
+const BASE_URL = "http://localhost:5000";
 
 interface User {
   _id: string; // Ajout de l'identifiant de Mongoose
