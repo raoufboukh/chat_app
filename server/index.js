@@ -12,7 +12,7 @@ dotenv.config();
 app.use(express.json({ limit: "20mb", extended: true }));
 app.use(
   cors({
-    origin: ["https://chat-app-eight-flame.vercel.app"],
+    origin: ["http://localhost:5173"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })

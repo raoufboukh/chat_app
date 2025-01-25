@@ -7,7 +7,7 @@ const httpServer = createServer(app); // Renommé de 'server' à 'httpServer'
 
 const io = new Server(httpServer, {
   cors: {
-    origin: ["https://chat-app-eight-flame.vercel.app"],
+    origin: ["http://localhost:5173"],
   },
 });
 // used to store OnlineUsers
