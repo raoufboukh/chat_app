@@ -55,7 +55,11 @@ export const login = async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (!user) return res.status(401).send("Email doesn't exist");
-    const isPassword = bcrypt.compare(password, user.password);
+    if (password.length < 6)
+      return res.status.json({
+        message: "Password must be at least 6 characters",
+      });
+    const isPassword = await bcrypt.compare(password, user.password);
     if (!isPassword) return res.status(401).send("Invalid Password");
     generateToken(user._id, res);
     res.status(200).json({

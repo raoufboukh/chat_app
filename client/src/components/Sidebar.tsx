@@ -51,7 +51,7 @@ const Sidebar = () => {
                 ? "bg-base-300 ring-1 ring-base-300"
                 : ""
             }`}
-            key={user.id}
+            key={user._id}
           >
             <div className="relative mx-auto lg:mx-0">
               <img

@@ -1,6 +1,6 @@
 import axios from "axios";
 
 export const axiosInstance = axios.create({
-  baseURL: "https://chat-app-api-eosin.vercel.app",
+  baseURL: "http://localhost:5000",
   withCredentials: true,
 });
